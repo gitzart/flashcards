@@ -1,9 +1,10 @@
 import React, { Component } from 'react'
 import {
-  View, Text, TextInput, TouchableOpacity, KeyboardAvoidingView
+  View, Text, TextInput, KeyboardAvoidingView, Keyboard
 } from 'react-native'
 import styled from 'styled-components/native'
 import * as db from '../utils/db'
+import CustomBtn from './CustomBtn'
 
 /* ===========================
     Styled components
@@ -13,15 +14,6 @@ const Field = styled.View`
   border-color: ${props => props.error ? 'red' : '#777'};
   padding: 5px 7px;
   margin-bottom: 10px;
-`
-
-const ButtonView = styled.View`
-  background-color: transparent;
-  border-radius: 5px;
-  justify-content: center;
-  align-items: center;
-  align-self: center;
-  height: 50px;
 `
 
 const Title = styled.Text`
@@ -39,16 +31,6 @@ const ErrorText = styled.Text`
 /* ===========================
     React components
 ============================== */
-function CustomBtn ({ children, onPress, style={} }) {
-  return (
-    <TouchableOpacity onPress={onPress}>
-      <ButtonView style={style}>
-        {children}
-      </ButtonView>
-    </TouchableOpacity>
-  )
-}
-
 class AddDeck extends Component {
   state = {
     title: '',
@@ -56,19 +38,22 @@ class AddDeck extends Component {
   }
 
   handleOnSubmit = () => {
-    if (!this.state.title) {
-      this.setState({ error: true })
-    } else {
+    const { title } = this.state
+
+    if (title) {
+      Keyboard.dismiss()
+
       this.setState({
         title: '',
         error: false
       })
 
-      db.decks.add(this.state.title)
+      db.decks.add(title)
         .catch(e => console.error(e))
 
-      const { navigation } = this.props
-      navigation.goBack()
+      this.props.navigation.navigate('DeckDetail', { title })
+    } else {
+      this.setState({ error: true })
     }
   }
 
@@ -99,7 +84,7 @@ class AddDeck extends Component {
         <CustomBtn
             onPress={this.handleOnSubmit}
             style={{ backgroundColor: '#252525', width: 150 }}>
-          <Text style={{ color: 'white' }}>Add new deck</Text>
+          <Text style={{ color: 'white' }}>Add Deck</Text>
         </CustomBtn>
       </KeyboardAvoidingView>
     )
