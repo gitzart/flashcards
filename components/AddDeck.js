@@ -1,10 +1,15 @@
+// third-party module imports
 import React, { Component } from 'react'
 import {
   View, Text, TextInput, KeyboardAvoidingView, Keyboard
 } from 'react-native'
+import { connect } from 'react-redux'
 import styled from 'styled-components/native'
+
+// local module imports
 import * as db from '../utils/db'
 import CustomBtn from './CustomBtn'
+import { loadDecks } from '../actions'
 
 /* ===========================
     Styled components
@@ -41,17 +46,19 @@ class AddDeck extends Component {
     const { title } = this.state
 
     if (title) {
-      Keyboard.dismiss()
-
       this.setState({
         title: '',
         error: false
       })
 
-      db.decks.add(title)
-        .catch(e => console.error(e))
-
+      Keyboard.dismiss()
+      db.decks.add(title).catch(e => console.error(e))
       this.props.navigation.navigate('DeckDetail', { title })
+
+      // Update the DeckList
+      db.decks.getAll()
+        .catch(e => console.error(e))
+        .then(decks => this.props.dispatch(loadDecks(decks)))
     } else {
       this.setState({ error: true })
     }
@@ -91,4 +98,4 @@ class AddDeck extends Component {
   }
 }
 
-export default AddDeck
+export default connect()(AddDeck)
