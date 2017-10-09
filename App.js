@@ -1,14 +1,40 @@
+// third-party module imports
 import React from 'react'
 import { StyleSheet, Text, View } from 'react-native'
-import * as db from './utils/db'
+import { createStore } from 'redux'
+import { Provider } from 'react-redux'
 import styled from 'styled-components/native'
-import { StackNavigator } from 'react-navigation'
-import Home from './components/Home'
+import { StackNavigator, TabNavigator } from 'react-navigation'
+
+// local module imports
+import * as db from './utils/db'
+import reducer from './reducers'
+import AddDeck from './components/AddDeck'
+import DeckList from './components/DeckList'
+import DeckDetail from './components/DeckDetail'
+import AddCard from './components/AddCard'
+import Quiz from './components/Quiz'
+
+const Tabs = TabNavigator({
+  DeckList: {
+    screen: DeckList,
+    navigationOptions: {
+      title: 'Decks'
+    }
+  },
+  AddDeck: {
+    screen: AddDeck,
+    navigationOptions: {
+      title: 'Add deck'
+    }
+  }
+})
 
 const MainNavigator = StackNavigator({
-  Home: {
-    screen: Home
-  }
+  Home: { screen: Tabs },
+  DeckDetail: { screen: DeckDetail },
+  AddCard: { screen: AddCard },
+  Quiz: { screen: Quiz }
 })
 
 export default class App extends React.Component {
@@ -16,9 +42,11 @@ export default class App extends React.Component {
     // db.clear()
 
     return (
-      <View style={{ flex: 1 }}>
-        <MainNavigator />
-      </View>
+      <Provider store={createStore(reducer)}>
+        <View style={{ flex: 1 }}>
+          <MainNavigator />
+        </View>
+      </Provider>
     );
   }
 }
