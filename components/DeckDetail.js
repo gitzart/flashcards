@@ -57,7 +57,7 @@ class DeckDetail extends Component {
 
               <View>
                 <CustomBtn
-                    onPress={() => navigate('AddCard')}
+                    onPress={() => navigate('AddCard', { deck })}
                     style={{ backgroundColor: '#252525', width: 220 }}>
                   <Text style={{ color: 'white' }}>Add Card</Text>
                 </CustomBtn>

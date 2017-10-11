@@ -1,29 +1,17 @@
-// third-party module imports
 import React, { Component } from 'react'
 import {
   View, Text, TextInput, KeyboardAvoidingView, Keyboard
 } from 'react-native'
 import { connect } from 'react-redux'
 import styled from 'styled-components/native'
-
-// local module imports
 import * as db from '../utils/db'
-import CustomBtn from './CustomBtn'
 import { loadDecks } from '../actions'
+import CustomBtn from './CustomBtn'
 
-/* ===========================
-    Styled components
-============================== */
 const Field = styled.View`
   border: 1px solid;
   border-color: ${props => props.error ? 'red' : '#777'};
   padding: 5px 7px;
-  margin-bottom: 10px;
-`
-
-const Title = styled.Text`
-  font-size: 16px;
-  padding: 10px 0;
   margin-bottom: 10px;
 `
 
@@ -33,29 +21,31 @@ const ErrorText = styled.Text`
   text-align: center;
 `
 
-/* ===========================
-    React components
-============================== */
-class AddDeck extends Component {
+class AddCard extends Component {
   state = {
-    title: undefined,
+    question: undefined,
+    answer: undefined,
     error: false
   }
 
   handleSubmit = () => {
-    const { title } = this.state
+    const { title } = this.props.navigation.state.params.deck
+    const { question, answer } = this.state
 
-    if (title) {
+    if (question && answer && title) {
       this.setState({
-        title: '',
+        question: undefined,
+        answer: undefined,
         error: false
       })
 
       Keyboard.dismiss()
-      db.decks.add(title).catch(e => console.error(e))
-      this.props.navigation.navigate('DeckDetail', { title })
+      db.cards.add(question, answer, title)
+        .catch(e => console.error(e))
+        .then(() => {
+          this.props.navigation.navigate('DeckDetail', { title })
+        })
 
-      // Update the DeckList
       db.decks.getAll()
         .catch(e => console.error(e))
         .then(decks => this.props.dispatch(loadDecks(decks)))
@@ -67,18 +57,29 @@ class AddDeck extends Component {
   render () {
     return (
       <KeyboardAvoidingView
-          behavior='position'
+          behavior='padding'
           style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-        <Title>
-          What is the title of your new deck?
-        </Title>
+        <Field error={this.state.error}>
+          <TextInput
+            onChangeText={question => this.setState({ question })}
+            value={this.state.question}
+            autoFocus={true}
+            placeholder='Question'
+            underlineColorAndroid='transparent'
+            selectTextOnFocus={true}
+            selectionColor='lightblue'
+            returnKeyType='next'
+            onSubmitEditing={() => this.nextInput.focus()}
+            style={{ width: 300 }}
+          />
+        </Field>
 
         <Field error={this.state.error}>
           <TextInput
-            onChangeText={title => this.setState({ title })}
-            value={this.state.title}
-            autoFocus={true}
-            placeholder='Deck title'
+            ref={input => this.nextInput = input}
+            onChangeText={answer => this.setState({ answer })}
+            value={this.state.answer}
+            placeholder='Answer'
             underlineColorAndroid='transparent'
             selectTextOnFocus={true}
             selectionColor='lightblue'
@@ -87,16 +88,19 @@ class AddDeck extends Component {
           />
         </Field>
 
-        {this.state.error && <ErrorText>Deck title is required!</ErrorText>}
+        {this.state.error &&
+          <ErrorText>
+          Both question and answer are required!
+          </ErrorText>}
 
         <CustomBtn
             onPress={this.handleSubmit}
             style={{ backgroundColor: '#252525', width: 150 }}>
-          <Text style={{ color: 'white' }}>Add Deck</Text>
+          <Text style={{ color: 'white' }}>Add Card</Text>
         </CustomBtn>
       </KeyboardAvoidingView>
     )
   }
 }
 
-export default connect()(AddDeck)
+export default connect()(AddCard)
