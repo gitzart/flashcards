@@ -17,7 +17,7 @@ const SubContainer = Container.extend`
 const Title = styled.Text`
   color: ${props => props.color || 'black'}
   font-size: ${props => props.size || '18px'};
-  padding: 10px 0;
+  padding: 10px;
   text-align: center;
 `
 
@@ -29,9 +29,11 @@ class DeckDetail extends Component {
   state = { deck: null }
 
   componentDidMount () {
-    const { title } = this.props.navigation.state.params
+    const { title, deck } = this.props.navigation.state.params
 
-    if (title) {
+    if (deck) {
+      this.setState({ deck })
+    } else if (title) {
       db.decks.get(title)
         .then(deck => this.setState({ deck }))
         .catch(e => console.error(e))
@@ -56,13 +58,13 @@ class DeckDetail extends Component {
               <View>
                 <CustomBtn
                     onPress={() => navigate('AddCard')}
-                    style={{ backgroundColor: '#252525', width: 150 }}>
+                    style={{ backgroundColor: '#252525', width: 220 }}>
                   <Text style={{ color: 'white' }}>Add Card</Text>
                 </CustomBtn>
 
                 <CustomBtn
                     onPress={() => navigate('Quiz')}
-                    style={{ backgroundColor: '#252525', width: 150 }}>
+                    style={{ backgroundColor: '#252525', width: 220 }}>
                   <Text style={{ color: 'white' }}>Start Quiz</Text>
                 </CustomBtn>
               </View>

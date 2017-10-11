@@ -1,26 +1,19 @@
 // third-party module imports
 import React, { Component } from 'react'
-import { View, Text, FlatList, ActivityIndicator } from 'react-native'
+import { Text, FlatList, ActivityIndicator } from 'react-native'
 import { connect } from 'react-redux'
 import styled from 'styled-components/native'
 
 // local module imports
 import * as db from '../utils/db'
 import { loadDecks } from '../actions'
+import DeckItem from './DeckItem'
 
 const Container = styled.View`
   flex: 1;
   justify-content: center;
   align-items: center;
 `
-
-function DeckItem ({ deck }) {
-  return (
-    <View>
-      <Text>{JSON.stringify(deck)}</Text>
-    </View>
-  )
-}
 
 class DeckList extends Component {
   componentDidMount () {
@@ -29,15 +22,21 @@ class DeckList extends Component {
       .then(decks => this.props.dispatch(loadDecks(decks)))
   }
 
+  _renderItem = ({ item }) => (
+    <DeckItem
+      navigate={this.props.navigation.navigate}
+      deck={item}
+    />
+  )
+
   render () {
     const { decks, loading } = this.props
 
     return decks.length
       ? <FlatList
-          style={{ flex: 1 }}
-          keyExtractor={(item, index) => index}
           data={decks}
-          renderItem={({ item }) => <DeckItem deck={item}></DeckItem>}
+          renderItem={this._renderItem}
+          keyExtractor={(item, index) => index}
         />
       : <Container>
           {loading
