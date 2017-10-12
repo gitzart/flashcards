@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import {
-  View, Text, TextInput, KeyboardAvoidingView, Keyboard
+  View, Text, TextInput, KeyboardAvoidingView, Keyboard, ToastAndroid
 } from 'react-native'
 import { connect } from 'react-redux'
 import styled from 'styled-components/native'
@@ -44,6 +44,8 @@ class AddCard extends Component {
         .catch(e => console.error(e))
         .then(() => {
           this.props.navigation.navigate('DeckDetail', { title })
+          ToastAndroid.showWithGravity(
+            'New question added.', ToastAndroid.LONG, ToastAndroid.BOTTOM)
         })
 
       db.decks.getAll()

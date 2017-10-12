@@ -1,7 +1,7 @@
 // third-party module imports
 import React, { Component } from 'react'
 import {
-  View, Text, TextInput, KeyboardAvoidingView, Keyboard
+  View, Text, TextInput, KeyboardAvoidingView, Keyboard, ToastAndroid
 } from 'react-native'
 import { connect } from 'react-redux'
 import styled from 'styled-components/native'
@@ -54,6 +54,8 @@ class AddDeck extends Component {
       Keyboard.dismiss()
       db.decks.add(title).catch(e => console.error(e))
       this.props.navigation.navigate('DeckDetail', { title })
+      ToastAndroid.showWithGravity(
+        'New deck added.', ToastAndroid.LONG, ToastAndroid.BOTTOM)
 
       // Update the DeckList
       db.decks.getAll()
@@ -77,7 +79,6 @@ class AddDeck extends Component {
           <TextInput
             onChangeText={title => this.setState({ title })}
             value={this.state.title}
-            autoFocus={true}
             placeholder='Deck title'
             underlineColorAndroid='transparent'
             selectTextOnFocus={true}
