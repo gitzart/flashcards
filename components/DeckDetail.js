@@ -63,7 +63,7 @@ class DeckDetail extends Component {
                 </CustomBtn>
 
                 <CustomBtn
-                    onPress={() => navigate('Quiz')}
+                    onPress={() => navigate('Quiz', { deck })}
                     style={{ backgroundColor: '#252525', width: 220 }}>
                   <Text style={{ color: 'white' }}>Start Quiz</Text>
                 </CustomBtn>
