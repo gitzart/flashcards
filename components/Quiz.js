@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
 import { View, Text } from 'react-native'
-import { connect } from 'react-redux'
 import styled from 'styled-components/native'
 import CustomBtn from './CustomBtn'
 
@@ -10,45 +9,54 @@ const Container = styled.View`
   align-items: center;
 `
 
+function Card ({ content, btnText, onPress }) {
+  return (
+    <View>
+      <Text style={{ fontSize: 22, padding: 10, textAlign: 'center' }}>
+        {content}
+      </Text>
+      <CustomBtn onPress={onPress}>
+        <Text style={{ color: 'red' }}>{btnText}</Text>
+      </CustomBtn>
+    </View>
+  )
+}
+
+function Button ({ btnColor, btnText, onPress }) {
+  return (
+    <CustomBtn
+        onPress={onPress}
+        style={{ backgroundColor: btnColor, width: 210 }}>
+      <Text style={{ color: 'white' }}>{btnText}</Text>
+    </CustomBtn>
+  )
+}
+
 class Quiz extends Component {
   state = {
     deck: null,
-    question: null,
-    currentQuestion: 0,
-    totalQuestion: undefined,
+    card: null,
+    questionNo: 0,
+    totalQuestion: null,
     quizScore: 0,
     isFlipped: false
   }
 
   componentWillMount () {
     const { deck } = this.props.navigation.state.params
-    const total = deck.questions.length
-
     this.setState({
       deck,
-      question: deck.questions[0],
-      totalQuestion: total,
-      quizScore: total
+      card: deck.questions[0],
+      totalQuestion: deck.questions.length
     })
   }
 
   increaseScore = () => {
-    const { quizScore, isFlipped, totalQuestion } = this.state
-    if (quizScore > totalQuestion) {
-      this.setState({ quizScore: totalQuestion })
-    }
-    // reset the card to question side
-    isFlipped && this.flip()
+    this.setState({ quizScore: ++this.state.quizScore })
     this.nextQuestion()
   }
 
   decreaseScore = () => {
-    const { quizScore, isFlipped } = this.state
-    if (quizScore !== 0) {
-      this.setState({ quizScore: quizScore - 1 })
-    }
-    // reset the card to question side
-    isFlipped && this.flip()
     this.nextQuestion()
   }
 
@@ -57,92 +65,67 @@ class Quiz extends Component {
   }
 
   nextQuestion = () => {
-    this.setState(({ currentQuestion, deck }) => {
-      currentQuestion += 1
+    this.setState(({ questionNo, deck }) => {
+      questionNo += 1
       return {
-        currentQuestion,
-        question: deck.questions[currentQuestion]
+        questionNo,
+        card: deck.questions[questionNo],
+        isFlipped: false  // reset the card to question side
       }
     })
   }
 
   restart = () => {
     const { deck } = this.props.navigation.state.params
-    const total = deck.questions.length
-
     this.setState({
       deck,
-      question: deck.questions[0],
-      currentQuestion: 0,
-      totalQuestion: total,
-      quizScore: total,
+      card: deck.questions[0],
+      questionNo: 0,
+      totalQuestion: deck.questions.length,
+      quizScore: 0,
       isFlipped: false
     })
   }
 
   render () {
     const {
-      deck, isFlipped, question, currentQuestion, quizScore, totalQuestion
+      deck, isFlipped, card, questionNo, quizScore, totalQuestion
     } = this.state
 
-    return totalQuestion !== currentQuestion
+    return totalQuestion !== questionNo
       ? <View style={{ flex: 1 }}>
           <Text style={{ padding: 10, textAlign: 'left' }}>
-            {currentQuestion + 1} / {totalQuestion}
+            {questionNo + 1} / {totalQuestion}
           </Text>
 
           <Container>
             {isFlipped
-              ? <View>
-                  <Text>{question.answer}</Text>
-                  <CustomBtn onPress={this.flip}>
-                    <Text style={{ color: 'red' }}>Question</Text>
-                  </CustomBtn>
-                </View>
-              : <View>
-                  <Text>{question.question}</Text>
-                  <CustomBtn onPress={this.flip}>
-                    <Text style={{ color: 'red' }}>Answer</Text>
-                  </CustomBtn>
-                </View>
+              ? <Card content={card.answer} btnText='Question' onPress={this.flip} />
+              : <Card content={card.question} btnText='Answer' onPress={this.flip} />
             }
 
             <View>
-              <CustomBtn
-                  onPress={this.increaseScore}
-                  style={{ backgroundColor: 'green', width: 210 }}>
-                <Text style={{ color: 'white' }}>Correct</Text>
-              </CustomBtn>
-              <CustomBtn
-                  onPress={this.decreaseScore}
-                  style={{ backgroundColor: 'red', width: 210 }}>
-                <Text style={{ color: 'white' }}>Incorrect</Text>
-              </CustomBtn>
+              <Button btnColor='green' btnText='Correct' onPress={this.increaseScore} />
+              <Button btnColor='red' btnText='Incorrect' onPress={this.decreaseScore} />
             </View>
           </Container>
         </View>
-      : <View style={{ flex: 1 }}>
+      : <Container>
           <View>
-            <Text>Congratulations!</Text>
-            <Text>
+            <Text style={{ fontSize: 32 }}>Score:</Text>
+            <Text style={{ fontSize: 18 }}>
               You've got {quizScore} out of {totalQuestion} right.
             </Text>
           </View>
 
           <View>
-            <CustomBtn
-                onPress={this.restart}
-                style={{ backgroundColor: 'green', width: 210 }}>
-              <Text style={{ color: 'white' }}>Restart Quiz</Text>
-            </CustomBtn>
-            <CustomBtn
-                onPress={() => this.props.navigation.goBack()}
-                style={{ backgroundColor: 'red', width: 210 }}>
-              <Text style={{ color: 'white' }}>Back To Deck</Text>
-            </CustomBtn>
+            <Button btnColor='black' btnText='Restart Quiz' onPress={this.restart} />
+            <Button btnColor='black' btnText='Back To Deck' onPress={() => (
+              this.props.navigation.goBack()
+            )} />
           </View>
-        </View>
+        </Container>
   }
 }
 
-export default connect()(Quiz)
+export default Quiz
