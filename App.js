@@ -20,22 +20,58 @@ const Tabs = TabNavigator({
   DeckList: {
     screen: DeckList,
     navigationOptions: {
-      title: 'Decks'
+      tabBarLabel: 'Decks'
     }
   },
   AddDeck: {
     screen: AddDeck,
     navigationOptions: {
-      title: 'Add deck'
+      tabBarLabel: 'Add deck'
     }
+  }
+}, {
+  navigationOptions: {
+    header: null
+  },
+  tabBarOptions: {
+    style: {
+      backgroundColor: 'black'
+    },
+    indicatorStyle: {
+      backgroundColor: 'orange',
+      height: 5
+    },
+    upperCaseLabel: false
   }
 })
 
 const MainNavigator = StackNavigator({
   Home: { screen: Tabs },
   DeckDetail: { screen: DeckDetail },
-  AddCard: { screen: AddCard },
-  Quiz: { screen: Quiz }
+  AddCard: {
+    screen: AddCard,
+    navigationOptions: {
+      title: 'Add a New Card'
+    }
+  },
+  Quiz: {
+    screen: Quiz,
+    navigationOptions: {
+      title: 'Quiz'
+    }
+  }
+}, {
+  navigationOptions: {
+    headerStyle: {
+      backgroundColor: 'black'
+    },
+    headerTitleStyle: {
+      color: 'white',
+      fontSize: 14,
+      fontWeight: 'normal'
+    },
+    headerTintColor: 'white'
+  }
 })
 
 export default class App extends React.Component {
