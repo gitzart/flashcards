@@ -1,7 +1,8 @@
 // third-party module imports
 import React from 'react'
-import { StyleSheet, Text, View } from 'react-native'
+import { StyleSheet, Text, View, StatusBar } from 'react-native'
 import { createStore } from 'redux'
+import { Constants } from 'expo'
 import { Provider } from 'react-redux'
 import styled from 'styled-components/native'
 import { StackNavigator, TabNavigator } from 'react-navigation'
@@ -44,6 +45,13 @@ export default class App extends React.Component {
     return (
       <Provider store={createStore(reducer)}>
         <View style={{ flex: 1 }}>
+          <View style={{ backgroundColor: 'black', height: Constants.statusBarHeight }}>
+            <StatusBar
+              translucent
+              backgroundColor='black'
+              barStyle='light-content'
+            />
+          </View>
           <MainNavigator />
         </View>
       </Provider>
