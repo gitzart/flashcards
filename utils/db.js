@@ -82,12 +82,13 @@ async function clear () {
 /* ===========================
     Decks
 ============================== */
-function addDeck (title) {
+async function addDeck (title) {
   const deck = {
     title,
     questions: []
   }
-  return set(key(title), deck)
+  await set(key(title), deck)
+  return getDeck(title)
 }
 
 function getDeck (title) {
@@ -95,9 +96,7 @@ function getDeck (title) {
 }
 
 async function getAllDecks () {
-  const keys = (await getAllKeys())
-    .filter(key => key !== 'Flashcards:notifications')
-
+  const keys = await getAllKeys()
   const decks = (await multiGet(keys))
     .map(([ key, value ]) => JSON.parse(value))
 
@@ -117,7 +116,8 @@ async function addCard (question, answer, title) {
 
   try {
     deck.questions.push(card)
-    return set(key(title), deck)
+    await set(key(title), deck)
+    return getDeck(title)
   } catch (e) {
     errorLogger('addCard', e)
   }
@@ -171,6 +171,4 @@ const cards = {
   remove: removeCard
 }
 
-const notifications = {}
-
-export { clear, decks, cards, notifications }
+export { clear, decks, cards }
