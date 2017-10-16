@@ -66,11 +66,13 @@ class DeckDetail extends Component {
                   <Text style={{ color: 'white' }}>Add Card</Text>
                 </CustomBtn>
 
-                <CustomBtn
-                    onPress={() => navigate('Quiz', { deck })}
-                    style={{ backgroundColor: '#252525', width: 220 }}>
-                  <Text style={{ color: 'white' }}>Start Quiz</Text>
-                </CustomBtn>
+                {deck.questions.length !== 0 && (
+                  <CustomBtn
+                      onPress={() => navigate('Quiz', { deck })}
+                      style={{ backgroundColor: '#252525', width: 220 }}>
+                    <Text style={{ color: 'white' }}>Start Quiz</Text>
+                  </CustomBtn>
+                )}
               </View>
             </SubContainer>
           : <ActivityIndicator color='orange' size='large' />
