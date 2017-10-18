@@ -3,6 +3,7 @@ import {
   View, Text, TextInput, KeyboardAvoidingView, Keyboard, ToastAndroid
 } from 'react-native'
 import { connect } from 'react-redux'
+import { NavigationActions } from 'react-navigation'
 import styled from 'styled-components/native'
 import * as db from '../utils/db'
 import { loadDecks } from '../actions'
@@ -40,17 +41,24 @@ class AddCard extends Component {
       })
 
       Keyboard.dismiss()
+
       db.cards.add(question, answer, title)
         .catch(e => console.error(e))
         .then(() => {
-          this.props.navigation.navigate('DeckDetail', { title })
           ToastAndroid.showWithGravity(
             'New question added.', ToastAndroid.LONG, ToastAndroid.BOTTOM)
-        })
 
-      db.decks.getAll()
-        .catch(e => console.error(e))
-        .then(decks => this.props.dispatch(loadDecks(decks)))
+          this.props.navigation.dispatch(NavigationActions.reset({
+            index: 1,
+            actions: [
+              NavigationActions.navigate({ routeName: 'Home' }),
+              NavigationActions.navigate({
+                routeName: 'DeckDetail',
+                params: { title }
+              })
+            ]
+          }))
+        })
     } else {
       this.setState({ error: true })
     }
