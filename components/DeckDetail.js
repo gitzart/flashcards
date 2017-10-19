@@ -7,10 +7,6 @@ import CustomBtn from './CustomBtn'
 const Container = styled.View`
   flex: 1;
   align-items: center;
-  justify-content: center;
-`
-
-const SubContainer = Container.extend`
   justify-content: space-around;
 `
 
@@ -30,53 +26,34 @@ class DeckDetail extends Component {
     title: navigation.state.params.deck.title
   })
 
-  state = { deck: null }
-
-  componentDidMount () {
-    const { title, deck } = this.props.navigation.state.params
-
-    if (deck) {
-      this.setState({ deck })
-    } else if (title) {
-      db.decks.get(title)
-        .then(deck => this.setState({ deck }))
-        .catch(e => console.error(e))
-    }
-  }
-
   render () {
-    const { deck } = this.state
+    const { deck } = this.props.navigation.state.params
     const { navigate } = this.props.navigation
 
     return (
       <Container>
-        {deck
-          ? <SubContainer>
-              <View>
-                <Title size='32px'>{deck.title}</Title>
-                <SubTitle color='#555' size='20px'>
-                  {deck.questions.length} cards
-                </SubTitle>
-              </View>
+        <View>
+          <Title size='32px'>{deck.title}</Title>
+          <SubTitle color='#555' size='20px'>
+            {deck.questions.length} cards
+          </SubTitle>
+        </View>
 
-              <View>
-                <CustomBtn
-                    onPress={() => navigate('AddCard', { deck })}
-                    style={{ backgroundColor: '#252525', width: 220 }}>
-                  <Text style={{ color: 'white' }}>Add Card</Text>
-                </CustomBtn>
+        <View>
+          <CustomBtn
+              onPress={() => navigate('AddCard', { deck })}
+              style={{ backgroundColor: '#252525', width: 220 }}>
+            <Text style={{ color: 'white' }}>Add Card</Text>
+          </CustomBtn>
 
-                {deck.questions.length !== 0 && (
-                  <CustomBtn
-                      onPress={() => navigate('Quiz', { deck })}
-                      style={{ backgroundColor: '#252525', width: 220 }}>
-                    <Text style={{ color: 'white' }}>Start Quiz</Text>
-                  </CustomBtn>
-                )}
-              </View>
-            </SubContainer>
-          : <ActivityIndicator color='orange' size='large' />
-        }
+          {deck.questions.length !== 0 && (
+            <CustomBtn
+                onPress={() => navigate('Quiz', { deck })}
+                style={{ backgroundColor: '#252525', width: 220 }}>
+              <Text style={{ color: 'white' }}>Start Quiz</Text>
+            </CustomBtn>
+          )}
+        </View>
       </Container>
     )
   }
