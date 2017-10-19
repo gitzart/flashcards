@@ -1,12 +1,13 @@
+// third-party module imports
 import React, { Component } from 'react'
 import {
   View, Text, TextInput, KeyboardAvoidingView, Keyboard, ToastAndroid
 } from 'react-native'
-import { connect } from 'react-redux'
 import { NavigationActions } from 'react-navigation'
 import styled from 'styled-components/native'
+
+// local module imports
 import * as db from '../utils/db'
-import { loadDecks } from '../actions'
 import CustomBtn from './CustomBtn'
 
 const Field = styled.View`
@@ -100,7 +101,7 @@ class AddCard extends Component {
 
         {this.state.error &&
           <ErrorText>
-          Both question and answer are required!
+            Both question and answer are required!
           </ErrorText>}
 
         <CustomBtn
@@ -113,4 +114,4 @@ class AddCard extends Component {
   }
 }
 
-export default connect()(AddCard)
+export default AddCard

@@ -1,12 +1,10 @@
 // third-party module imports
 import React, { Component } from 'react'
 import { Text, FlatList, ActivityIndicator } from 'react-native'
-import { connect } from 'react-redux'
 import styled from 'styled-components/native'
 
 // local module imports
 import * as db from '../utils/db'
-import { loadDecks } from '../actions'
 import DeckItem from './DeckItem'
 
 const Container = styled.View`
@@ -16,10 +14,12 @@ const Container = styled.View`
 `
 
 class DeckList extends Component {
+  state = { decks: [], loading: true }
+
   componentDidMount () {
     db.decks.getAll()
       .catch(e => console.error(e))
-      .then(decks => this.props.dispatch(loadDecks(decks)))
+      .then(decks => this.setState({ decks, loading: false }))
   }
 
   _renderItem = ({ item }) => (
@@ -30,7 +30,7 @@ class DeckList extends Component {
   )
 
   render () {
-    const { decks, loading } = this.props
+    const { decks, loading } = this.state
 
     return decks.length
       ? <FlatList
@@ -47,9 +47,4 @@ class DeckList extends Component {
   }
 }
 
-function mapStateToProps ({ decks, misc }) {
-  const { loading } = misc
-  return { decks, loading }
-}
-
-export default connect(mapStateToProps)(DeckList)
+export default DeckList

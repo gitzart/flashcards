@@ -3,18 +3,13 @@ import React, { Component } from 'react'
 import {
   View, Text, TextInput, KeyboardAvoidingView, Keyboard, ToastAndroid
 } from 'react-native'
-import { connect } from 'react-redux'
 import { NavigationActions } from 'react-navigation'
 import styled from 'styled-components/native'
 
 // local module imports
 import * as db from '../utils/db'
 import CustomBtn from './CustomBtn'
-import { loadDecks } from '../actions'
 
-/* ===========================
-    Styled components
-============================== */
 const Field = styled.View`
   border: 1px solid;
   border-color: ${props => props.error ? 'red' : '#777'};
@@ -34,9 +29,6 @@ const ErrorText = styled.Text`
   text-align: center;
 `
 
-/* ===========================
-    React components
-============================== */
 class AddDeck extends Component {
   state = {
     title: undefined,
@@ -110,4 +102,4 @@ class AddDeck extends Component {
   }
 }
 
-export default connect()(AddDeck)
+export default AddDeck
