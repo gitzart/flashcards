@@ -4,6 +4,7 @@ import {
   View, Text, TextInput, KeyboardAvoidingView, Keyboard, ToastAndroid
 } from 'react-native'
 import { connect } from 'react-redux'
+import { NavigationActions } from 'react-navigation'
 import styled from 'styled-components/native'
 
 // local module imports
@@ -52,15 +53,24 @@ class AddDeck extends Component {
       })
 
       Keyboard.dismiss()
-      db.decks.add(title).catch(e => console.error(e))
-      this.props.navigation.navigate('DeckDetail', { title })
-      ToastAndroid.showWithGravity(
-        'New deck added.', ToastAndroid.LONG, ToastAndroid.BOTTOM)
 
-      // Update the DeckList
-      db.decks.getAll()
+      db.decks.add(title)
         .catch(e => console.error(e))
-        .then(decks => this.props.dispatch(loadDecks(decks)))
+        .then(deck => {
+          ToastAndroid.showWithGravity(
+            'New deck added.', ToastAndroid.LONG, ToastAndroid.BOTTOM)
+
+          this.props.navigation.dispatch(NavigationActions.reset({
+            index: 1,
+            actions: [
+              NavigationActions.navigate({ routeName: 'Home' }),
+              NavigationActions.navigate({
+                routeName: 'DeckDetail',
+                params: { deck }
+              })
+            ]
+          }))
+        })
     } else {
       this.setState({ error: true })
     }

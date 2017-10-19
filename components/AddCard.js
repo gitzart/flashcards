@@ -44,7 +44,7 @@ class AddCard extends Component {
 
       db.cards.add(question, answer, title)
         .catch(e => console.error(e))
-        .then(() => {
+        .then(deck => {
           ToastAndroid.showWithGravity(
             'New question added.', ToastAndroid.LONG, ToastAndroid.BOTTOM)
 
@@ -54,7 +54,7 @@ class AddCard extends Component {
               NavigationActions.navigate({ routeName: 'Home' }),
               NavigationActions.navigate({
                 routeName: 'DeckDetail',
-                params: { title }
+                params: { deck }
               })
             ]
           }))
