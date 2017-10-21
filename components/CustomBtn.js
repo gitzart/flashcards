@@ -1,25 +1,26 @@
 import React from 'react'
-import { TouchableOpacity } from 'react-native'
-import styled from 'styled-components/native'
-
-const ButtonView = styled.View`
-  background-color: transparent;
-  border-radius: 5px;
-  justify-content: center;
-  align-items: center;
-  align-self: center;
-  height: 50px;
-  margin-bottom: 8px;
-`
+import { View, TouchableOpacity, StyleSheet } from 'react-native'
 
 function CustomBtn ({ children, onPress, style={} }) {
   return (
     <TouchableOpacity onPress={onPress}>
-      <ButtonView style={style}>
+      <View style={[ styles.button, style ]}>
         {children}
-      </ButtonView>
+      </View>
     </TouchableOpacity>
   )
 }
+
+const styles = StyleSheet.create({
+  button: {
+    backgroundColor: 'transparent',
+    borderRadius: 5,
+    justifyContent: 'center',
+    alignItems: 'center',
+    alignSelf: 'center',
+    height: 50,
+    marginBottom: 10
+  }
+})
 
 export default CustomBtn

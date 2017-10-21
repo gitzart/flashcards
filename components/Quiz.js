@@ -1,13 +1,6 @@
 import React, { Component } from 'react'
-import { View, Text } from 'react-native'
-import styled from 'styled-components/native'
+import { View, Text, StyleSheet } from 'react-native'
 import CustomBtn from './CustomBtn'
-
-const Container = styled.View`
-  flex: 1;
-  justify-content: space-around;
-  align-items: center;
-`
 
 function Card ({ content, btnText, onPress }) {
   return (
@@ -26,7 +19,7 @@ function Button ({ btnColor, btnText, onPress }) {
   return (
     <CustomBtn
         onPress={onPress}
-        style={{ backgroundColor: btnColor, width: 210 }}>
+        style={{ backgroundColor: btnColor, width: 220 }}>
       <Text style={{ color: 'white' }}>{btnText}</Text>
     </CustomBtn>
   )
@@ -98,7 +91,7 @@ class Quiz extends Component {
             {questionNo + 1} / {totalQuestion}
           </Text>
 
-          <Container>
+          <View style={[ styles.container ]}>
             {isFlipped
               ? <Card content={card.answer} btnText='Question' onPress={this.flip} />
               : <Card content={card.question} btnText='Answer' onPress={this.flip} />
@@ -108,13 +101,12 @@ class Quiz extends Component {
               <Button btnColor='green' btnText='Correct' onPress={this.increaseScore} />
               <Button btnColor='red' btnText='Incorrect' onPress={this.decreaseScore} />
             </View>
-          </Container>
+          </View>
         </View>
-      : <Container>
-          <View>
-            <Text style={{ fontSize: 32 }}>Score:</Text>
-            <Text style={{ fontSize: 18 }}>
-              You've got {quizScore} out of {totalQuestion} right.
+      : <View style={[ styles.container ]}>
+          <View style={{ padding: 10 }}>
+            <Text style={{ fontSize: 32 }}>
+              Score: {quizScore} / {totalQuestion}
             </Text>
           </View>
 
@@ -124,8 +116,16 @@ class Quiz extends Component {
               this.props.navigation.goBack()
             )} />
           </View>
-        </Container>
+        </View>
   }
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: 'space-around',
+    alignItems: 'center'
+  }
+})
 
 export default Quiz

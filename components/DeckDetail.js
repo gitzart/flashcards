@@ -1,25 +1,6 @@
 import React, { Component } from 'react'
-import { View, Text, ActivityIndicator, TouchableOpacity } from 'react-native'
-import styled from 'styled-components/native'
-import * as db from '../utils/db'
+import { View, Text, StyleSheet } from 'react-native'
 import CustomBtn from './CustomBtn'
-
-const Container = styled.View`
-  flex: 1;
-  align-items: center;
-  justify-content: space-around;
-`
-
-const Title = styled.Text`
-  color: ${props => props.color || 'black'}
-  font-size: ${props => props.size || '18px'};
-  padding: 10px;
-  text-align: center;
-`
-
-const SubTitle = Title.extend`
-  padding: 0;
-`
 
 class DeckDetail extends Component {
   static navigationOptions = ({ navigation }) => ({
@@ -29,14 +10,13 @@ class DeckDetail extends Component {
   render () {
     const { deck } = this.props.navigation.state.params
     const { navigate } = this.props.navigation
+    const total = deck.questions.length
 
     return (
-      <Container>
+      <View style={[ styles.container ]}>
         <View>
-          <Title size='32px'>{deck.title}</Title>
-          <SubTitle color='#555' size='20px'>
-            {deck.questions.length} cards
-          </SubTitle>
+          <Text style={[ styles.title ]} >{deck.title}</Text>
+          <Text style={[ styles.subtitle ]}>{total} cards</Text>
         </View>
 
         <View>
@@ -46,7 +26,7 @@ class DeckDetail extends Component {
             <Text style={{ color: 'white' }}>Add Card</Text>
           </CustomBtn>
 
-          {deck.questions.length !== 0 && (
+          {total !== 0 && (
             <CustomBtn
                 onPress={() => navigate('Quiz', { deck })}
                 style={{ backgroundColor: '#252525', width: 220 }}>
@@ -54,9 +34,28 @@ class DeckDetail extends Component {
             </CustomBtn>
           )}
         </View>
-      </Container>
+      </View>
     )
   }
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: 'space-around',
+    alignItems: 'center'
+  },
+  title: {
+    color: 'black',
+    fontSize: 32,
+    padding: 10,
+    textAlign: 'center'
+  },
+  subtitle: {
+    color: '#555',
+    fontSize: 20,
+    textAlign: 'center'
+  }
+})
 
 export default DeckDetail

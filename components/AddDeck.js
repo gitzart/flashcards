@@ -1,33 +1,14 @@
 // third-party module imports
 import React, { Component } from 'react'
 import {
-  View, Text, TextInput, KeyboardAvoidingView, Keyboard, ToastAndroid
+  View, Text, TextInput, KeyboardAvoidingView,
+  Keyboard, ToastAndroid, StyleSheet
 } from 'react-native'
 import { NavigationActions } from 'react-navigation'
-import styled from 'styled-components/native'
 
 // local module imports
 import * as db from '../utils/db'
 import CustomBtn from './CustomBtn'
-
-const Field = styled.View`
-  border: 1px solid;
-  border-color: ${props => props.error ? 'red' : '#777'};
-  padding: 5px 7px;
-  margin-bottom: 10px;
-`
-
-const Title = styled.Text`
-  font-size: 16px;
-  padding: 10px 0;
-  margin-bottom: 10px;
-`
-
-const ErrorText = styled.Text`
-  color: red;
-  margin-bottom: 10px;
-  text-align: center;
-`
 
 class AddDeck extends Component {
   state = {
@@ -69,15 +50,15 @@ class AddDeck extends Component {
   }
 
   render () {
-    return (
-      <KeyboardAvoidingView
-          behavior='position'
-          style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-        <Title>
-          What is the title of your new deck?
-        </Title>
+    const { error } = this.state
 
-        <Field error={this.state.error}>
+    return (
+      <KeyboardAvoidingView behavior='padding' style={[ styles.container ]}>
+        <Text style={[ styles.title ]}>
+          What is the title of your new deck?
+        </Text>
+
+        <View style={[ styles.field, error && { borderColor: 'red' } ]}>
           <TextInput
             onChangeText={title => this.setState({ title })}
             value={this.state.title}
@@ -86,11 +67,11 @@ class AddDeck extends Component {
             selectTextOnFocus={true}
             selectionColor='lightblue'
             onSubmitEditing={this.handleSubmit}
-            style={{ width: 300 }}
           />
-        </Field>
+        </View>
 
-        {this.state.error && <ErrorText>Deck title is required!</ErrorText>}
+        {error &&
+          <Text style={[ styles.error ]}>Deck title is required!</Text>}
 
         <CustomBtn
             onPress={this.handleSubmit}
@@ -101,5 +82,34 @@ class AddDeck extends Component {
     )
   }
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+  title: {
+    fontSize: 18,
+    padding: 10,
+    marginBottom: 10,
+    textAlign: 'center'
+  },
+  field: {
+    borderWidth: 1,
+    borderColor: '#777',
+    paddingVertical: 5,
+    paddingHorizontal: 7,
+    marginBottom: 20,
+    width: 300,
+    alignSelf: 'center'
+  },
+  error: {
+    color: 'red',
+    padding: 10,
+    marginBottom: 10,
+    textAlign: 'center'
+  }
+})
 
 export default AddDeck

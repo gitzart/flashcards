@@ -1,17 +1,7 @@
-// third-party module imports
 import React, { Component } from 'react'
-import { Text, FlatList, ActivityIndicator } from 'react-native'
-import styled from 'styled-components/native'
-
-// local module imports
+import { View, Text, FlatList, ActivityIndicator, StyleSheet } from 'react-native'
 import * as db from '../utils/db'
 import DeckItem from './DeckItem'
-
-const Container = styled.View`
-  flex: 1;
-  justify-content: center;
-  align-items: center;
-`
 
 class DeckList extends Component {
   state = { decks: [], loading: true }
@@ -24,7 +14,9 @@ class DeckList extends Component {
 
   _renderItem = ({ item }) => (
     <DeckItem
-      navigate={this.props.navigation.navigate}
+      onPress={() => (
+        this.props.navigation.navigate('DeckDetail', { deck: item })
+      )}
       deck={item}
     />
   )
@@ -38,13 +30,21 @@ class DeckList extends Component {
           renderItem={this._renderItem}
           keyExtractor={(item, index) => index}
         />
-      : <Container>
+      : <View style={[ styles.container ]}>
           {loading
             ? <ActivityIndicator color='orange' size='large' />
             : <Text>No decks created.</Text>
           }
-        </Container>
+        </View>
   }
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center'
+  }
+})
 
 export default DeckList

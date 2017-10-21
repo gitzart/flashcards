@@ -1,27 +1,14 @@
 // third-party module imports
 import React, { Component } from 'react'
 import {
-  View, Text, TextInput, KeyboardAvoidingView, Keyboard, ToastAndroid
+  View, Text, TextInput, KeyboardAvoidingView,
+  Keyboard, ToastAndroid, StyleSheet
 } from 'react-native'
 import { NavigationActions } from 'react-navigation'
-import styled from 'styled-components/native'
 
 // local module imports
 import * as db from '../utils/db'
 import CustomBtn from './CustomBtn'
-
-const Field = styled.View`
-  border: 1px solid;
-  border-color: ${props => props.error ? 'red' : '#777'};
-  padding: 5px 7px;
-  margin-bottom: 10px;
-`
-
-const ErrorText = styled.Text`
-  color: red;
-  margin-bottom: 10px;
-  text-align: center;
-`
 
 class AddCard extends Component {
   state = {
@@ -66,11 +53,11 @@ class AddCard extends Component {
   }
 
   render () {
+    const { error } = this.state
+
     return (
-      <KeyboardAvoidingView
-          behavior='padding'
-          style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-        <Field error={this.state.error}>
+      <KeyboardAvoidingView behavior='padding' style={[ styles.container ]}>
+        <View style={[ styles.field, error && { borderColor: 'red' } ]}>
           <TextInput
             onChangeText={question => this.setState({ question })}
             value={this.state.question}
@@ -81,11 +68,10 @@ class AddCard extends Component {
             selectionColor='lightblue'
             returnKeyType='next'
             onSubmitEditing={() => this.nextInput.focus()}
-            style={{ width: 300 }}
           />
-        </Field>
+        </View>
 
-        <Field error={this.state.error}>
+        <View style={[ styles.field, error && { borderColor: 'red' } ]}>
           <TextInput
             ref={input => this.nextInput = input}
             onChangeText={answer => this.setState({ answer })}
@@ -95,14 +81,13 @@ class AddCard extends Component {
             selectTextOnFocus={true}
             selectionColor='lightblue'
             onSubmitEditing={this.handleSubmit}
-            style={{ width: 300 }}
           />
-        </Field>
+        </View>
 
-        {this.state.error &&
-          <ErrorText>
+        {error &&
+          <Text style={[ styles.error ]}>
             Both question and answer are required!
-          </ErrorText>}
+          </Text>}
 
         <CustomBtn
             onPress={this.handleSubmit}
@@ -113,5 +98,28 @@ class AddCard extends Component {
     )
   }
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+  field: {
+    borderWidth: 1,
+    borderColor: '#777',
+    paddingVertical: 5,
+    paddingHorizontal: 7,
+    marginBottom: 20,
+    width: 300,
+    alignSelf: 'center'
+  },
+  error: {
+    color: 'red',
+    padding: 10,
+    marginBottom: 10,
+    textAlign: 'center'
+  }
+})
 
 export default AddCard

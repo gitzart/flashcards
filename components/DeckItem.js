@@ -1,35 +1,34 @@
 import React from 'react'
-import styled from 'styled-components/native'
+import { Text, TouchableOpacity, StyleSheet } from 'react-native'
 
-const Card = styled.TouchableOpacity`
-  border-bottom-color: #ccc;
-  border-bottom-width: 1px;
-  padding: 10px;
-  min-height: 110px;
-  justify-content: center;
-  align-items: center;
-`
-
-const Title = styled.Text`
-  color: ${props => props.color || 'black'}
-  font-size: ${props => props.size || '18px'};
-  padding: ${props => props.padding || '10px 0'};
-  text-align: center;
-`
-
-const SubTitle = Title.extend`
-  padding: 0;
-`
-
-function DeckItem ({ deck, navigate }) {
+function DeckItem ({ deck, onPress }) {
   return (
-    <Card onPress={() => navigate('DeckDetail', { deck })}>
-      <Title padding='0'>{deck.title}</Title>
-      <SubTitle color='#555' size='13px'>
-        {deck.questions.length} cards
-      </SubTitle>
-    </Card>
+    <TouchableOpacity style={[ styles.listItem ]} onPress={onPress}>
+      <Text style={[ styles.title ]} >{deck.title}</Text>
+      <Text style={[ styles.subtitle ]}>{deck.questions.length} cards</Text>
+    </TouchableOpacity>
   )
 }
+
+const styles = StyleSheet.create({
+  listItem: {
+    borderBottomColor: '#ccc',
+    borderBottomWidth: 1,
+    padding: 10,
+    minHeight: 110,
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+  title: {
+    color: 'black',
+    fontSize: 18,
+    textAlign: 'center'
+  },
+  subtitle: {
+    color: '#555',
+    fontSize: 13,
+    textAlign: 'center'
+  }
+})
 
 export default DeckItem

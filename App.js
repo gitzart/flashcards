@@ -1,12 +1,10 @@
 // third-party module imports
 import React from 'react'
-import { StyleSheet, Text, View, StatusBar } from 'react-native'
+import { View, StatusBar } from 'react-native'
 import { Constants } from 'expo'
-import styled from 'styled-components/native'
 import { StackNavigator, TabNavigator } from 'react-navigation'
 
 // local module imports
-import * as db from './utils/db'
 import AddDeck from './components/AddDeck'
 import DeckList from './components/DeckList'
 import DeckDetail from './components/DeckDetail'
@@ -73,8 +71,6 @@ const MainNavigator = StackNavigator({
 
 export default class App extends React.Component {
   render() {
-    // db.clear()
-
     return (
       <View style={{ flex: 1 }}>
         <View style={{ backgroundColor: 'black', height: Constants.statusBarHeight }}>
