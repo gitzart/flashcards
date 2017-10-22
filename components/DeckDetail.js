@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import { View, Text, StyleSheet } from 'react-native'
+import { setNotification } from '../utils/notifications'
 import CustomBtn from './CustomBtn'
 
 class DeckDetail extends Component {
@@ -28,7 +29,10 @@ class DeckDetail extends Component {
 
           {total !== 0 && (
             <CustomBtn
-                onPress={() => navigate('Quiz', { deck })}
+                onPress={() => {
+                  setNotification()
+                  navigate('Quiz', { deck })
+                }}
                 style={{ backgroundColor: '#252525', width: 220 }}>
               <Text style={{ color: 'white' }}>Start Quiz</Text>
             </CustomBtn>

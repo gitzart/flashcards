@@ -5,6 +5,7 @@ import { Constants } from 'expo'
 import { StackNavigator, TabNavigator } from 'react-navigation'
 
 // local module imports
+import { setNotification } from './utils/notifications'
 import AddDeck from './components/AddDeck'
 import DeckList from './components/DeckList'
 import DeckDetail from './components/DeckDetail'
@@ -70,6 +71,10 @@ const MainNavigator = StackNavigator({
 })
 
 export default class App extends React.Component {
+  componentDidMount () {
+    setNotification()
+  }
+
   render() {
     return (
       <View style={{ flex: 1 }}>
