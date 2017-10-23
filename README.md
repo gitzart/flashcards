@@ -18,4 +18,4 @@ The app will notify users to study cards everyday at 6 o'clock
 
 ## Platform
 
-The app works best on Android, for now.
+The app works only on Android.
