@@ -12,19 +12,20 @@ import CustomBtn from './CustomBtn'
 
 class AddCard extends Component {
   state = {
-    question: undefined,
-    answer: undefined,
+    question: '',
+    answer: '',
     error: false
   }
 
   handleSubmit = () => {
     const { title } = this.props.navigation.state.params.deck
-    const { question, answer } = this.state
+    const question = this.state.question.trim()
+    const answer = this.state.answer.trim()
 
     if (question && answer && title) {
       this.setState({
-        question: undefined,
-        answer: undefined,
+        question: '',
+        answer: '',
         error: false
       })
 
@@ -48,7 +49,7 @@ class AddCard extends Component {
           }))
         })
     } else {
-      this.setState({ error: true })
+      this.setState({ question, answer, error: true })
     }
   }
 

@@ -12,12 +12,12 @@ import CustomBtn from './CustomBtn'
 
 class AddDeck extends Component {
   state = {
-    title: undefined,
+    title: '',
     error: false
   }
 
   handleSubmit = () => {
-    const { title } = this.state
+    const title = this.state.title.trim()
 
     if (title) {
       this.setState({
@@ -45,7 +45,7 @@ class AddDeck extends Component {
           }))
         })
     } else {
-      this.setState({ error: true })
+      this.setState({ title, error: true })
     }
   }
 
