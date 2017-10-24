@@ -2,7 +2,7 @@
 import React, { Component } from 'react'
 import {
   View, Text, TextInput, KeyboardAvoidingView,
-  Keyboard, ToastAndroid, StyleSheet
+  Keyboard, ToastAndroid, StyleSheet, Platform
 } from 'react-native'
 import { NavigationActions } from 'react-navigation'
 
@@ -30,8 +30,10 @@ class AddDeck extends Component {
       db.decks.add(title)
         .catch(e => console.error(e))
         .then(deck => {
-          ToastAndroid.showWithGravity(
-            'New deck added.', ToastAndroid.LONG, ToastAndroid.BOTTOM)
+          if (Platform.OS !== 'ios') {
+            ToastAndroid.showWithGravity(
+              'New deck added.', ToastAndroid.LONG, ToastAndroid.BOTTOM)
+          }
 
           this.props.navigation.dispatch(NavigationActions.reset({
             index: 1,
