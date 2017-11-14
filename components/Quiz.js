@@ -45,7 +45,7 @@ class Quiz extends Component {
   }
 
   increaseScore = () => {
-    this.setState({ quizScore: ++this.state.quizScore })
+    this.setState({ quizScore: this.state.quizScore + 1 })
     this.nextQuestion()
   }
 
